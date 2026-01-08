@@ -14,9 +14,11 @@ interface Student {
 
 function App() {
   const [studentId, setStudentId] = useState('');
+  const [studentName, setStudentName] = useState('');
   const [student, setStudent] = useState<Student | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingByName, setLoadingByName] = useState(false);
 
   const handleQuery = async () => {
     if (!studentId.trim()) {
@@ -59,9 +61,54 @@ function App() {
     }
   };
 
+  const handleQueryByName = async () => {
+    if (!studentName.trim()) {
+      setError('请输入学生姓名');
+      setStudent(null);
+      return;
+    }
+
+    setLoadingByName(true);
+    setError('');
+    setStudent(null);
+
+    try {
+      // 使用 getFirstListItem 查询 students 集合中 name 等于输入内容的记录
+      const record = await pb.collection('students').getFirstListItem(
+        `name = "${studentName.trim()}"`
+      );
+
+      const foundStudent: Student = {
+        id: record.id,
+        name: record.name as string,
+        college: record.college as string,
+        major: record.major as string,
+        sid: record.sid as string,
+      };
+      setStudent(foundStudent);
+      setError('');
+    } catch (err: any) {
+      console.error('查询失败:', err);
+      if (err?.status === 404) {
+        setError('数据库中未找到该姓名的档案');
+      } else {
+        setError('查询失败，请检查网络连接或后端服务');
+      }
+      setStudent(null);
+    } finally {
+      setLoadingByName(false);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleQuery();
+    }
+  };
+
+  const handleKeyPressByName = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleQueryByName();
     }
   };
   return (
@@ -104,7 +151,7 @@ function App() {
           color: '#6b7280',
           textAlign: 'center'
         }}>
-          请输入学号 S202411132 进行查询
+          测试提示：输入学号 S202411132 或姓名 刘钰胜 进行查询
         </p>
 
         {/* 输入卡片区域 */}
@@ -121,6 +168,7 @@ function App() {
           alignItems: 'center',
           gap: '16px'
         }}>
+          {/* 学号查询区域 */}
           <div style={{
             width: '100%',
             display: 'flex',
@@ -161,7 +209,7 @@ function App() {
             />
             <button
               onClick={handleQuery}
-              disabled={loading}
+              disabled={loading || loadingByName}
               style={{
                 padding: '11px 26px',
                 fontSize: '15px',
@@ -169,10 +217,10 @@ function App() {
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 color: '#e5f0ff',
-                backgroundColor: loading ? '#64748b' : '#1d4ed8',
+                backgroundColor: (loading || loadingByName) ? '#64748b' : '#1d4ed8',
                 border: 'none',
                 borderRadius: '999px',
-                cursor: loading ? 'not-allowed' : 'pointer',
+                cursor: (loading || loadingByName) ? 'not-allowed' : 'pointer',
                 minWidth: '160px',
                 transform: 'translateZ(0)',
                 boxShadow: '0 10px 25px rgba(37, 99, 235, 0.25)',
@@ -180,14 +228,14 @@ function App() {
                 willChange: 'transform'
               }}
               onMouseEnter={(e) => {
-                if (!loading) {
+                if (!loading && !loadingByName) {
                   e.currentTarget.style.backgroundColor = '#1e40af';
                   e.currentTarget.style.transform = 'scale(1.03) translateZ(0)';
                   e.currentTarget.style.boxShadow = '0 18px 40px rgba(30, 64, 175, 0.35)';
                 }
               }}
               onMouseLeave={(e) => {
-                if (!loading) {
+                if (!loading && !loadingByName) {
                   e.currentTarget.style.backgroundColor = '#1d4ed8';
                   e.currentTarget.style.transform = 'scale(1) translateZ(0)';
                   e.currentTarget.style.boxShadow = '0 10px 25px rgba(37, 99, 235, 0.25)';
@@ -195,6 +243,83 @@ function App() {
               }}
             >
               {loading ? '查询中...' : '立即查询'}
+            </button>
+          </div>
+          {/* 姓名查询区域 */}
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '12px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap'
+          }}>
+            <input
+              type="text"
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
+              onKeyPress={handleKeyPressByName}
+              placeholder="请输入学生姓名"
+              style={{
+                flex: 1,
+                minWidth: '0',
+                padding: '12px 18px',
+                fontSize: '15px',
+                border: '1px solid #e5e7eb',
+                borderRadius: '999px',
+                outline: 'none',
+                transition: 'border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease',
+                boxSizing: 'border-box',
+                backgroundColor: '#f9fafb',
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#2563eb';
+                e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.15)';
+                e.target.style.backgroundColor = '#ffffff';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e5e7eb';
+                e.target.style.boxShadow = 'none';
+                e.target.style.backgroundColor = '#f9fafb';
+              }}
+            />
+            <button
+              onClick={handleQueryByName}
+              disabled={loading || loadingByName}
+              style={{
+                padding: '11px 26px',
+                fontSize: '15px',
+                fontWeight: 500,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#e5f0ff',
+                backgroundColor: (loading || loadingByName) ? '#64748b' : '#1d4ed8',
+                border: 'none',
+                borderRadius: '999px',
+                cursor: (loading || loadingByName) ? 'not-allowed' : 'pointer',
+                minWidth: '160px',
+                transform: 'translateZ(0)',
+                boxShadow: '0 10px 25px rgba(37, 99, 235, 0.25)',
+                transition: 'background-color 0.2s ease, transform 0.16s ease-out, box-shadow 0.16s ease-out',
+                willChange: 'transform'
+              }}
+              onMouseEnter={(e) => {
+                if (!loading && !loadingByName) {
+                  e.currentTarget.style.backgroundColor = '#1e40af';
+                  e.currentTarget.style.transform = 'scale(1.03) translateZ(0)';
+                  e.currentTarget.style.boxShadow = '0 18px 40px rgba(30, 64, 175, 0.35)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading && !loadingByName) {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.transform = 'scale(1) translateZ(0)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(37, 99, 235, 0.25)';
+                }
+              }}
+            >
+              {loadingByName ? '查询中...' : '按姓名查询'}
             </button>
           </div>
         </div>
