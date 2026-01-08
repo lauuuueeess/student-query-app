@@ -64,113 +64,154 @@ function App() {
       handleQuery();
     }
   };
-
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#f2f2f5',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif'
+      padding: '32px 16px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", system-ui, sans-serif',
+      letterSpacing: '0.03em',
+      color: '#0f172a'
     }}>
       <div style={{
         width: '100%',
-        maxWidth: '600px',
+        maxWidth: '720px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        gap: '30px'
+        alignItems: 'stretch',
+        gap: '28px'
       }}>
         {/* 标题 */}
         <h1 style={{
           margin: 0,
-          fontSize: '32px',
-          fontWeight: 'bold',
-          color: '#333',
-          textAlign: 'center'
+          fontSize: '34px',
+          fontWeight: 600,
+          color: '#020617',
+          textAlign: 'center',
+          letterSpacing: '0.06em'
         }}>
           学生档案查询系统
         </h1>
 
         {/* 提示文字 */}
         <p style={{
-          margin: 0,
-          fontSize: '16px',
-          color: '#666',
+          margin: '4px 0 0',
+          fontSize: '14px',
+          color: '#6b7280',
           textAlign: 'center'
         }}>
           请输入学号 S202411132 进行查询
         </p>
 
-        {/* 输入框和按钮 */}
+        {/* 输入卡片区域 */}
         <div style={{
+          marginTop: '12px',
           width: '100%',
+          backgroundColor: '#ffffff',
+          borderRadius: '24px',
+          padding: '20px 24px 18px',
+          boxShadow: '0 18px 45px rgba(15, 23, 42, 0.06)',
+          border: '1px solid rgba(148, 163, 184, 0.12)',
           display: 'flex',
-          gap: '10px',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
+          gap: '16px'
         }}>
-          <input
-            type="text"
-            value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="请输入学号"
-            style={{
-              width: '100%',
-              maxWidth: '400px',
-              padding: '12px 16px',
-              fontSize: '16px',
-              border: '2px solid #ddd',
-              borderRadius: '8px',
-              outline: 'none',
-              transition: 'border-color 0.3s',
-              boxSizing: 'border-box'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#4a90e2'}
-            onBlur={(e) => e.target.style.borderColor = '#ddd'}
-          />
-          <button
-            onClick={handleQuery}
-            disabled={loading}
-            style={{
-              padding: '12px 32px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              color: '#fff',
-              backgroundColor: loading ? '#999' : '#4a90e2',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'background-color 0.3s',
-              minWidth: '150px'
-            }}
-            onMouseEnter={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#357abd';
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#4a90e2';
-            }}
-          >
-            {loading ? '查询中...' : '立即查询'}
-          </button>
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '12px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap'
+          }}>
+            <input
+              type="text"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="请输入学号"
+              style={{
+                flex: 1,
+                minWidth: '0',
+                padding: '12px 18px',
+                fontSize: '15px',
+                border: '1px solid #e5e7eb',
+                borderRadius: '999px',
+                outline: 'none',
+                transition: 'border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease',
+                boxSizing: 'border-box',
+                backgroundColor: '#f9fafb',
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#2563eb';
+                e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.15)';
+                e.target.style.backgroundColor = '#ffffff';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e5e7eb';
+                e.target.style.boxShadow = 'none';
+                e.target.style.backgroundColor = '#f9fafb';
+              }}
+            />
+            <button
+              onClick={handleQuery}
+              disabled={loading}
+              style={{
+                padding: '11px 26px',
+                fontSize: '15px',
+                fontWeight: 500,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#e5f0ff',
+                backgroundColor: loading ? '#64748b' : '#1d4ed8',
+                border: 'none',
+                borderRadius: '999px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                minWidth: '160px',
+                transform: 'translateZ(0)',
+                boxShadow: '0 10px 25px rgba(37, 99, 235, 0.25)',
+                transition: 'background-color 0.2s ease, transform 0.16s ease-out, box-shadow 0.16s ease-out',
+                willChange: 'transform'
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = '#1e40af';
+                  e.currentTarget.style.transform = 'scale(1.03) translateZ(0)';
+                  e.currentTarget.style.boxShadow = '0 18px 40px rgba(30, 64, 175, 0.35)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.transform = 'scale(1) translateZ(0)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(37, 99, 235, 0.25)';
+                }
+              }}
+            >
+              {loading ? '查询中...' : '立即查询'}
+            </button>
+          </div>
         </div>
 
         {/* 错误提示 */}
         {error && (
           <div style={{
             width: '100%',
-            maxWidth: '400px',
-            padding: '12px 16px',
-            backgroundColor: '#fff3cd',
-            border: '1px solid #ffc107',
-            borderRadius: '8px',
-            color: '#856404',
+            maxWidth: '420px',
+            padding: '10px 14px',
+            marginTop: '6px',
+            backgroundColor: '#fef3c7',
+            border: '1px solid #facc15',
+            borderRadius: '999px',
+            color: '#92400e',
             textAlign: 'center',
-            fontSize: '14px'
+            fontSize: '13px'
           }}>
             {error}
           </div>
@@ -180,90 +221,166 @@ function App() {
         {student && (
           <div style={{
             width: '100%',
-            maxWidth: '400px',
-            padding: '24px',
-            backgroundColor: '#fff',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+            maxWidth: '520px',
+            padding: '22px 24px 20px',
+            backgroundColor: '#ffffff',
+            borderRadius: '26px',
+            boxShadow: '0 22px 55px rgba(15, 23, 42, 0.18)',
+            border: '1px solid rgba(148, 163, 184, 0.22)',
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px'
+            gap: '18px',
+            position: 'relative',
+            overflow: 'hidden'
           }}>
             <div style={{
-              borderBottom: '1px solid #eee',
-              paddingBottom: '12px',
-              marginBottom: '8px'
+              position: 'absolute',
+              inset: '-40%',
+              background: 'radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.12), transparent 60%)'
+            }} />
+            <div style={{
+              position: 'relative',
+              borderBottom: '1px solid rgba(148, 163, 184, 0.3)',
+              paddingBottom: '10px',
+              marginBottom: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px'
             }}>
               <h2 style={{
                 margin: 0,
-                fontSize: '20px',
-                color: '#333',
-                fontWeight: 'bold'
+                fontSize: '16px',
+                color: '#0f172a',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase'
               }}>
-                学生信息
+                学生档案
               </h2>
+              <span style={{
+                fontSize: '11px',
+                color: '#6b7280',
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase'
+              }}>
+                Student Profile
+              </span>
             </div>
             <div style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
+              flexDirection: 'row',
+              gap: '18px',
+              alignItems: 'stretch',
+              position: 'relative',
+              zIndex: 1
             }}>
+              {/* 左侧头像区域 */}
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '10px 16px',
+                borderRadius: '999px',
+                background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(15, 23, 42, 0.02))',
+                minWidth: '120px'
               }}>
                 <span style={{
-                  fontSize: '14px',
-                  color: '#666',
-                  fontWeight: 'bold'
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '999px',
+                  background: 'radial-gradient(circle at 30% 20%, #bfdbfe, #1d4ed8)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#eff6ff',
+                  fontWeight: 600,
+                  fontSize: '22px',
+                  boxShadow: '0 16px 40px rgba(37, 99, 235, 0.45)'
                 }}>
-                  姓名：
+                  {student.name?.[0] ?? '学'}
                 </span>
                 <span style={{
-                  fontSize: '16px',
-                  color: '#333'
+                  marginTop: '10px',
+                  fontSize: '13px',
+                  color: '#0f172a',
+                  fontWeight: 500,
+                  maxWidth: '100%',
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'
                 }}>
                   {student.name}
                 </span>
               </div>
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flex: 1,
+                padding: '4px 4px 4px 0',
+                gap: '10px'
               }}>
-                <span style={{
-                  fontSize: '14px',
-                  color: '#666',
-                  fontWeight: 'bold'
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+                  columnGap: '18px',
+                  rowGap: '8px'
                 }}>
-                  学院：
-                </span>
-                <span style={{
-                  fontSize: '16px',
-                  color: '#333'
-                }}>
-                  {student.college}
-                </span>
-              </div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <span style={{
-                  fontSize: '14px',
-                  color: '#666',
-                  fontWeight: 'bold'
-                }}>
-                  专业：
-                </span>
-                <span style={{
-                  fontSize: '16px',
-                  color: '#333'
-                }}>
-                  {student.major}
-                </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <span style={{
+                      fontSize: '11px',
+                      color: '#9ca3af',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.16em'
+                    }}>
+                      学号 / ID
+                    </span>
+                    <span style={{
+                      fontSize: '14px',
+                      color: '#111827',
+                      fontWeight: 500
+                    }}>
+                      {student.sid}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <span style={{
+                      fontSize: '11px',
+                      color: '#9ca3af',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.16em'
+                    }}>
+                      学院 / College
+                    </span>
+                    <span style={{
+                      fontSize: '14px',
+                      color: '#111827',
+                      fontWeight: 500
+                    }}>
+                      {student.college}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <span style={{
+                      fontSize: '11px',
+                      color: '#9ca3af',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.16em'
+                    }}>
+                      专业 / Major
+                    </span>
+                    <span style={{
+                      fontSize: '14px',
+                      color: '#111827',
+                      fontWeight: 500
+                    }}>
+                      {student.major}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -272,15 +389,16 @@ function App() {
         {/* 底部标识 */}
         <div style={{
           marginTop: '40px',
-          paddingTop: '20px',
-          borderTop: '1px solid #ddd',
+          paddingTop: '16px',
           width: '100%',
           textAlign: 'center'
         }}>
           <p style={{
             margin: 0,
-            fontSize: '14px',
-            color: '#999'
+            fontSize: '12px',
+            color: '#9ca3af',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase'
           }}>
             全栈架构展示：React + Vite + PocketBase
           </p>
